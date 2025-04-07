@@ -37,7 +37,7 @@ def get_inplanes():
 
 class BasicBlock(nn.Module):
     expansion = 1
-
+    
     def __init__(self, in_planes, planes, stride=1, downsample=None):
         super().__init__()
 
