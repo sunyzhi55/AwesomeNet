@@ -50,7 +50,6 @@ class CascadedGroupAttention1D(nn.Module):
             self.ab = self.attention_biases[:, self.attention_bias_idxs]
 
     def forward(self, x):  # x (B, L, C)
-        print("Input:", x.shape)
         B, L, C = x.shape
         x = x.permute(0, 2, 1)  # (B, C, L)
         feats_in = x.chunk(self.num_heads, dim=1)
@@ -71,7 +70,7 @@ class CascadedGroupAttention1D(nn.Module):
             feats_out.append(feat)
         x = self.proj(torch.cat(feats_out, dim=1))
         x = x.permute(0, 2, 1)
-        print("Output:", x.shape)
+        # print("Output:", x.shape)
         return x
 
 class CascadedGroupCrossAttention1D(nn.Module):
@@ -125,7 +124,6 @@ class CascadedGroupCrossAttention1D(nn.Module):
         return v @ attn.transpose(1, 2)
     def forward(self, x, y):  # x (B, L, C)
         assert x.shape == y.shape, "x, y shapes must be the same"
-        print("Input:", x.shape)
         B, L, C = x.shape
         x = x.permute(0, 2, 1)  # (B, C, L)
         y = y.permute(0, 2, 1)

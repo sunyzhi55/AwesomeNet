@@ -32,7 +32,8 @@ def conv1x1x1(in_planes, out_planes, stride=1):
                      stride=stride,
                      bias=False)
 def get_inplanes():
-    return [64, 128, 256, 512]
+    return [32, 64, 128, 256]
+    # return [64, 128, 256, 512]
 
 class BasicBlock(nn.Module):
     expansion = 1
@@ -535,14 +536,14 @@ class ResNet(nn.Module):
                                        layers[2],
                                        shortcut_type,
                                        stride=2)
-        # self.layer4 = self._make_layer(block,
-        #                                block_inplanes[3],
-        #                                layers[3],
-        #                                shortcut_type,
-        #                                stride=2)
+        self.layer4 = self._make_layer(block,
+                                       block_inplanes[3],
+                                       layers[3],
+                                       shortcut_type,
+                                       stride=2)
 
         self.avgpool = nn.AdaptiveAvgPool3d((1, 1, 1))
-        self.fc = nn.Linear(block_inplanes[2] * block.expansion, n_classes)
+        self.fc = nn.Linear(block_inplanes[3] * block.expansion, n_classes)
 
         for m in self.modules():
             if isinstance(m, nn.Conv3d):
@@ -599,7 +600,7 @@ class ResNet(nn.Module):
         x = self.layer1(x)
         x = self.layer2(x)
         x = self.layer3(x)
-        # x = self.layer4(x)
+        x = self.layer4(x)
 
         x = self.avgpool(x)
 
